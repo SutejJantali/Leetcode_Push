@@ -1,16 +1,23 @@
-1class Solution:
-2    def countBinarySubstrings(self, s: str) -> int:
-3        groups = [1]
-4
-5        for i in range(1, len(s)):
-6            if s[i-1] != s[i]:
-7                groups.append(1)
-8            else:
-9                groups[-1] += 1
-10        
-11        res = 0
-12
-13        for i in range(1, len(groups)):
-14            res += min(groups[i-1], groups[i])
-15        
-16        return res
+1class Solution {
+2    public int countBinarySubstrings(String s) {
+3        ArrayList<Integer> groups = new ArrayList<>();
+4        groups.add(1);
+5        int t = 0;
+6        for (int i = 1; i < s.length(); i++){
+7            if (s.charAt(i-1) != s.charAt(i)){
+8                groups.add(1);
+9                t += 1;
+10            }
+11            else{
+12                groups.set(t, groups.get(t)+1);
+13            }
+14        }
+15
+16        int res = 0;
+17        for (int i = 1; i < groups.size(); i++){
+18            res += Math.min(groups.get(i-1), groups.get(i));
+19        }
+20
+21        return res;
+22    }
+23}
