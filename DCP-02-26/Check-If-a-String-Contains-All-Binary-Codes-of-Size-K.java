@@ -1,11 +1,16 @@
-1class Solution:
-2    def hasAllCodes(self, s: str, k: int) -> bool:
-3        res = set()
-4        target = 1 << k
-5        for i in range(len(s)-k+1):
-6            sub = s[i:i+k]
-7            res.add(sub)
-8            if len(res) == target:
-9                return True
-10        
-11        return len(res) == target
+1class Solution {
+2    public boolean hasAllCodes(String s, int k) {
+3        Set <String> res = new HashSet<>();
+4        int target = 1 << k;
+5
+6        for (int i = 0; i < s.length() - k + 1; i++){
+7            String sub = s.substring(i, i+k);
+8            res.add(sub);
+9
+10            if (res.size() == target)
+11            return true;
+12        }
+13
+14        return res.size() == target;
+15    }
+16}
