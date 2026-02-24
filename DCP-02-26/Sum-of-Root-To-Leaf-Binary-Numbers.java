@@ -1,34 +1,20 @@
-1/**
-2 * Definition for a binary tree node.
-3 * public class TreeNode {
-4 *     int val;
-5 *     TreeNode left;
-6 *     TreeNode right;
-7 *     TreeNode() {}
-8 *     TreeNode(int val) { this.val = val; }
-9 *     TreeNode(int val, TreeNode left, TreeNode right) {
-10 *         this.val = val;
-11 *         this.left = left;
-12 *         this.right = right;
-13 *     }
-14 * }
-15 */
-16class Solution {
-17    public int sumRootToLeaf(TreeNode root) {
-18        return sumoflastnodes(root, 0);
-19    }
-20
-21    public int sumoflastnodes(TreeNode root, int lastsum){
-22        if (root == null){
-23            return 0;
-24        }
-25
-26        lastsum = lastsum * 2 + root.val;
-27
-28        if (root.left == null && root.right == null){
-29            return lastsum;
-30        }
-31
-32        return sumoflastnodes(root.left, lastsum) + sumoflastnodes(root.right, lastsum);
-33    }
-34}
+1# Definition for a binary tree node.
+2# class TreeNode:
+3#     def __init__(self, val=0, left=None, right=None):
+4#         self.val = val
+5#         self.left = left
+6#         self.right = right
+7class Solution:
+8    def sumRootToLeaf(self, root: Optional[TreeNode]) -> int:
+9        def sumoflastnodes(root, lastsum):
+10            if not root:
+11                return 0
+12            
+13            lastsum = lastsum*2 + root.val
+14
+15            if not root.left and not root.right:
+16                return lastsum
+17            
+18            return sumoflastnodes(root.left, lastsum) + sumoflastnodes(root.right, lastsum)
+19
+20        return sumoflastnodes(root, 0)
