@@ -24,3 +24,5 @@ class Solution {
     }
 
 }
+
+//https://leetcode.com/problems/path-existence-queries-in-a-graph-i/solutions/8385083/assign-ids-to-connected-components-easy-lj1yc
