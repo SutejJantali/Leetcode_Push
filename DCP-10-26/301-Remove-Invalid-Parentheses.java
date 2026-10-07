@@ -1,46 +1,56 @@
-class Solution(object):
+import java.util.*;
 
-    def __init__(self):
-        self.valid_expressions = set()
-        self.min_removed = float("inf")
+class Solution {
+    private Set<String> validexp = new HashSet<>();
+    private int min_rem;
+    
+    private void reset() {
+        this.validexp.clear();
+        this.min_rem = Integer.MAX_VALUE;
+    }
 
-    def removeInvalidParentheses(self, s):
-        """
-        :type s: str
-        :rtype: List[str]
-        """
-        # Reset tracking states before processing the string
-        self.valid_expressions = set()
-        self.min_removed = float("inf")
-        
-        # Start the recursive search
-        self.backtrack(s, 0, 0, 0, "", 0)
-        
-        return list(self.valid_expressions)
+    private void recurse(String s, int ind, int leftCount, int rightCount, StringBuilder exp, int rem_count) {
+        // Base case: reached the end of the string
+        if (ind == s.length()) {
+            if (leftCount == rightCount) {
+                if (rem_count <= this.min_rem) {
+                    String possible_ans = exp.toString();
 
-    def backtrack(self, string, index, left_count, right_count, current_expr, rem_count):
-        # Base Case: We processed the entire string
-        if index == len(string):
-            if left_count == right_count:
-                if rem_count < self.min_removed:
-                    self.min_removed = rem_count
-                    self.valid_expressions = {current_expr}  # Reset set with better solution
-                elif rem_count == self.min_removed:
-                    self.valid_expressions.add(current_expr)
-            return
+                    if (rem_count < this.min_rem) {
+                        this.validexp.clear();
+                        this.min_rem = rem_count;
+                    }
+                    this.validexp.add(possible_ans);
+                }
+            }
+        } else {
+            char currentCharacter = s.charAt(ind);
+            int length = exp.length();       
 
-        current_char = string[index]
+            if (currentCharacter != '(' && currentCharacter != ')') {
+                // For non-parentheses characters, we must keep them
+                exp.append(currentCharacter);
+                this.recurse(s, ind + 1, leftCount, rightCount, exp, rem_count);
+                exp.deleteCharAt(length); // Backtrack
+            } else {
+                // Choice 1: Remove the current parenthesis
+                this.recurse(s, ind + 1, leftCount, rightCount, exp, rem_count + 1);
+                
+                // Choice 2: Keep the current parenthesis
+                exp.append(currentCharacter);
+                if (currentCharacter == '(') {
+                    this.recurse(s, ind + 1, leftCount + 1, rightCount, exp, rem_count);
+                } else if (rightCount < leftCount) {
+                    this.recurse(s, ind + 1, leftCount, rightCount + 1, exp, rem_count);
+                }   
+                exp.deleteCharAt(length); // Backtrack
+            }
+        }
+    }
 
-        # Case 1: Non-parentheses characters (letters) must be kept
-        if current_char != '(' and current_char != ')':
-            self.backtrack(string, index + 1, left_count, right_count, current_expr + current_char, rem_count)
-            return
-
-        # Case 2: Skip/Ignore the current parenthesis (Simulating Deletion)
-        self.backtrack(string, index + 1, left_count, right_count, current_expr, rem_count + 1)
-
-        # Case 3: Keep the current parenthesis (If structurally valid)
-        if current_char == '(':
-            self.backtrack(string, index + 1, left_count + 1, right_count, current_expr + '(', rem_count)
-        elif right_count < left_count:
-            self.backtrack(string, index + 1, left_count, right_count + 1, current_expr + ')', rem_count)
+    public List<String> removeInvalidParentheses(String s) {
+        this.reset();
+        this.recurse(s, 0, 0, 0, new StringBuilder(), 0);
+        return new ArrayList<>(this.validexp);
+    }
+}
