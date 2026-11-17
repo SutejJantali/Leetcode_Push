@@ -1,17 +1,15 @@
-class Solution:
-    def countBits(self, n: int) -> list[int]:
-        res = [0]
-        curr = 1
-        while curr <= n:
-            temp = 0
-            next_curr = curr + 1
-            while curr:
-                if curr & 1 == 1:
-                    temp += 1
-                
-                curr >>= 1
-
-            res.append(temp)
-            curr = next_curr
-        
-        return res
+class Solution {
+public:
+    vector<int> countBits(int n) {
+        vector <int> res(n+1);
+        res[0] = 0;
+        for(int i = 1; i <= n; i++)
+        {
+            if(i % 2 == 0)
+            res[i] = res[i/2];
+            else
+            res[i] = res[i-1] + 1;
+        }
+        return res;
+    }
+};
